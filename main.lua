@@ -21,6 +21,7 @@ if gameMap.layers["Walls"] then
   for i,v in pairs(gameMap.layers["Walls"].objects) do
     local wall = world:newRectangleCollider(v.x,v.y,v.width,v.height)
     wall:setType("static")
+ -- table.insert(walls,wall)
   end
 end
 
