@@ -1,12 +1,29 @@
+GAME_VERSION = "DEV 1.0.0"
+
 require "player.player_main"
 
 function love.load()
+wf = require "libraries/windfield"
+world = wf.newWorld(0,0)
 camera = require("libraries.cam")
 cam = camera()
 
 sti = require("libraries/sti")
 gameMap = sti("maps/testTown.lua")
 playerLoad()
+-- After loading player add vars to the player table
+
+player.collider = world:newCircleCollider(300,400,20)
+player.collider:setFixedRotation(true)
+
+walls = {}
+if gameMap.layers["Walls"] then
+  for i,v in pairs(gameMap.layers["Walls"].objects) do
+    local wall = world:newRectangleCollider(v.x,v.y,v.width,v.height)
+    wall:setType("static")
+  end
+end
+
 
 end
 
@@ -15,7 +32,9 @@ cam:attach()
   gameMap:drawLayer(gameMap.layers["Ground"])
   gameMap:drawLayer(gameMap.layers["Trees"])
   playerDraw()
+  --world:draw()
 cam:detach()
+
 end
 
 function love.update(dt)
@@ -43,4 +62,7 @@ local h = love.graphics.getHeight()
     cam.y = (mapH - h/2)
   end
 
+world:update(dt)
+player.x = player.collider:getX()
+player.y = player.collider:getY() - player.spriteSheet:getHeight()/3
 end

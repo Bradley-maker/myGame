@@ -18,7 +18,7 @@ function playerLoad()
 
  player.name = nil
 
- player.speed = 5
+ player.speed = 300
 
 
  player.animations = {}
@@ -30,6 +30,8 @@ function playerLoad()
  player.anim = player.animations.left
 
 
+
+
 end
 
 function playerDraw()
@@ -38,30 +40,35 @@ end
 
 function playerUpdate(dt)
 local isMoving = false
+
+local vx = 0
+local vy = 0
   -- Movement commands
 if love.keyboard.isDown("w") then
-player.y = player.y - player.speed
+vy = player.speed * -1
 player.anim = player.animations.up
 isMoving = true
 end
 
 if love.keyboard.isDown("s") then
-player.y = player.y +player.speed
+vy =  player.speed
 player.anim = player.animations.down
 isMoving = true
 end
 
 if love.keyboard.isDown("a") then
-player.x = player.x - player.speed
+vx = player.speed * -1
 player.anim = player.animations.left
 isMoving = true
 end
 
 if love.keyboard.isDown("d") then
-player.x = player.x + player.speed
+vx = player.speed
 player.anim = player.animations.right
 isMoving = true
 end
+
+player.collider:setLinearVelocity(vx,vy)
 
 if isMoving == false then
 player.anim:gotoFrame(2)
